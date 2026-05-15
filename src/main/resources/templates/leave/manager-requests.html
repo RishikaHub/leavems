@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manager Leave Requests - LeaveMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:insert="fragments/layout :: navbar"></div>
+<div class="container py-4">
+    <h1 class="h4 mb-3">Team Leave Requests</h1>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Type</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Days</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${requests.content}">
+            <td th:text="${request.requesterName}"></td>
+            <td th:text="${request.leaveType}"></td>
+            <td th:text="${request.startDate}"></td>
+            <td th:text="${request.endDate}"></td>
+            <td th:text="${request.dayCount}"></td>
+            <td th:text="${request.status}"></td>
+            <td class="text-nowrap">
+                <a th:href="@{/manager/requests/{id}(id=${request.id})}" class="btn btn-sm btn-outline-secondary">Details</a>
+                <div th:if="${request.status} == 'PENDING'" class="mt-2">
+                    <form th:action="@{/manager/requests/{id}/approve(id=${request.id})}" method="post" class="d-inline">
+                        <input type="hidden" name="managerNote" value="Approved by manager">
+                        <button class="btn btn-sm btn-success">Approve</button>
+                    </form>
+                    <form th:action="@{/manager/requests/{id}/reject(id=${request.id})}" method="post" class="d-inline ms-1">
+                        <input type="hidden" name="managerNote" value="Rejected by manager">
+                        <button class="btn btn-sm btn-danger">Reject</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        <tr th:if="${requests.content.empty}">
+            <td colspan="7" class="text-center">No pending requests awaiting approval.</td>
+        </tr>
+        </tbody>
+    </table>
+    <nav th:if="${requests.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${requests.first}? 'disabled'">
+                <a class="page-link" th:href="@{/manager/requests(page=${requests.number - 1}, size=${requests.size})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, requests.totalPages - 1)}"
+                th:classappend="${pageNum} == ${requests.number}? 'active'">
+                <a class="page-link" th:href="@{/manager/requests(page=${pageNum}, size=${requests.size})}" th:text="${pageNum + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${requests.last}? 'disabled'">
+                <a class="page-link" th:href="@{/manager/requests(page=${requests.number + 1}, size=${requests.size})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

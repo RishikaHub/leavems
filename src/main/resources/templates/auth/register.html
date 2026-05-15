@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Leave Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="mb-4 text-center">Register</h3>
+
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                    <form method="post" th:action="@{/auth/register}">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="fullName" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" minlength="6" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select id="role" name="role" class="form-select" required>
+                                <option value="EMPLOYEE">Employee</option>
+                                <option value="MANAGER">Manager</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Direct Manager</label>
+                            <select id="managerId" name="managerId" class="form-select">
+                                <option value="">No manager</option>
+                                <option th:each="manager : ${managers}"
+                                        th:value="${manager.id}"
+                                        th:text="${manager.fullName + ' (' + manager.email + ')'}">
+                                </option>
+                            </select>
+                            <div class="form-text">Required for employees. Leave blank for managers.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        <a th:href="@{/auth/login}">Already have an account? Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const roleSelect = document.getElementById('role');
+    const managerSelect = document.getElementById('managerId');
+
+    function syncManagerRequirement() {
+        if (roleSelect.value === 'EMPLOYEE') {
+            managerSelect.required = true;
+        } else {
+            managerSelect.required = false;
+            managerSelect.value = '';
+        }
+    }
+
+    roleSelect.addEventListener('change', syncManagerRequirement);
+    syncManagerRequirement();
+</script>
+</body>
+</html>

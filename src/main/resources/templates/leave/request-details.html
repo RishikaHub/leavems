@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Details - LeaveMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<div class="container mt-4">
+    <div class="mb-3">
+        <a th:href="@{/leave/requests}" class="btn btn-outline-secondary">Back to My Requests</a>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0">Leave Request Details</h4>
+        </div>
+
+        <div class="card-body" th:if="${request != null}">
+            <dl class="row">
+                <dt class="col-sm-3">Request ID</dt>
+                <dd class="col-sm-9" th:text="${request.id}">ID</dd>
+
+                <dt class="col-sm-3">Leave Type</dt>
+                <dd class="col-sm-9" th:text="${request.leaveType}">VACATION</dd>
+
+                <dt class="col-sm-3">Start Date</dt>
+                <dd class="col-sm-9" th:text="${request.startDate}">2026-05-15</dd>
+
+                <dt class="col-sm-3">End Date</dt>
+                <dd class="col-sm-9" th:text="${request.endDate}">2026-05-16</dd>
+
+                <dt class="col-sm-3">Day Count</dt>
+                <dd class="col-sm-9" th:text="${request.dayCount}">1</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-secondary" th:text="${request.status}">PENDING</span>
+                </dd>
+
+                <dt class="col-sm-3">Reason</dt>
+                <dd class="col-sm-9"
+                    th:text="${request.reason != null and !request.reason.isBlank() ? request.reason : 'No reason provided'}">
+                    Reason
+                </dd>
+
+                <dt class="col-sm-3">Manager Note</dt>
+                <dd class="col-sm-9"
+                    th:text="${request.managerNote != null and !request.managerNote.isBlank() ? request.managerNote : 'No manager note'}">
+                    Manager Note
+                </dd>
+
+                <dt class="col-sm-3">Created At</dt>
+                <dd class="col-sm-9" th:text="${request.createdAt}">Created</dd>
+
+                <dt class="col-sm-3">Decided At</dt>
+                <dd class="col-sm-9"
+                    th:text="${request.decidedAt != null ? request.decidedAt : 'Not decided yet'}">
+                    Decided At
+                </dd>
+            </dl>
+
+            <div class="mt-4 d-flex gap-2">
+                <form th:if="${request.status.name() == 'PENDING'}"
+                      th:action="@{/leave/requests/{id}/withdraw(id=${request.id})}"
+                      method="post">
+                    <button class="btn btn-outline-danger" type="submit">Withdraw</button>
+                </form>
+
+                <form th:if="${request.status.name() == 'APPROVED'}"
+                      th:action="@{/leave/requests/{id}/cancel(id=${request.id})}"
+                      method="post">
+                    <button class="btn btn-outline-warning" type="submit">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

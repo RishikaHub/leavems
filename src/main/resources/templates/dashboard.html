@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - LeaveMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:insert="fragments/layout :: navbar"></div>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3">Welcome, <span th:text="${currentUser.fullName}">User</span></h1>
+            <p class="text-muted mb-0">Role: <strong th:text="${role}">EMPLOYEE</strong></p>
+        </div>
+        <div>
+            <a class="btn btn-outline-primary" th:href="@{/leave/requests}">My Requests</a>
+        </div>
+    </div>
+
+    <div th:if="${pendingApprovalsCount != null}" class="alert alert-info">
+        Pending approvals: <strong th:text="${pendingApprovalsCount}">0</strong>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">Leave Balances</div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Leave Type</th>
+                                <th>Remaining Days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="balance : ${balances}">
+                                <td th:text="${balance.leaveType}">VACATION</td>
+                                <td th:text="${balance.remainingDays}">20</td>
+                            </tr>
+                            <tr th:if="${balances.empty}">
+                                <td colspan="2" class="text-center py-3">No leave balances available.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">Quick Actions</div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-primary" th:href="@{/leave/requests/new}">Create New Request</a>
+                        <a class="btn btn-outline-secondary" th:href="@{/leave/requests}">View My Requests</a>
+                        <a class="btn btn-outline-secondary" th:href="@{/availability}">View Availability</a>
+                        <a class="btn btn-outline-secondary" th:href="@{/manager/requests}">Manager Approvals</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

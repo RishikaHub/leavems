@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Leave Request - LeaveMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:insert="fragments/layout :: navbar"></div>
+<div class="container py-4">
+    <h1 class="h4 mb-4">Edit Leave Request</h1>
+    <div th:if="${#fields.hasErrors()}" class="alert alert-danger">Please fix the errors below.</div>
+    <form th:action="@{/leave/requests/{id}/edit(id=${requestId})}" method="post" th:object="${updateRequest}">
+        <div class="mb-3">
+            <label class="form-label">Leave Type</label>
+            <select class="form-select" th:field="*{leaveType}">
+                <option th:each="type : ${leaveTypeOptions}" th:value="${type}" th:text="${type}"></option>
+            </select>
+            <div class="text-danger" th:errors="*{leaveType}"></div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-control" th:field="*{startDate}">
+                <div class="text-danger" th:errors="*{startDate}"></div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">End Date</label>
+                <input type="date" class="form-control" th:field="*{endDate}">
+                <div class="text-danger" th:errors="*{endDate}"></div>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label">Reason</label>
+            <textarea class="form-control" rows="4" th:field="*{reason}"></textarea>
+            <div class="text-danger" th:errors="*{reason}"></div>
+        </div>
+        <button class="btn btn-primary" type="submit">Save Changes</button>
+        <a class="btn btn-link" th:href="@{/leave/requests}">Cancel</a>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

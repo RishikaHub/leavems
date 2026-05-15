@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://PTU1DELL0017;databaseName=leavems;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: Welcome@123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.SQLServerDialect
+
+  thymeleaf:
+    cache: false
+
+app:
+  jwt:
+    secret: "change-this-secret-key-change-this-secret-key-123456"
+    expiration-minutes: 120
+
+server:
+  port: 8080
