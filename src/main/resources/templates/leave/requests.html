@@ -123,11 +123,14 @@
             <div class="col-md-2">
                 <label class="form-label">Sort By</label>
                 <select name="sort" class="form-select">
-                    <option value="createdAt,desc">Newest</option>
-                    <option value="createdAt,asc">Oldest</option>
-                    <option value="startDate,asc">Start Date</option>
-                    <option value="endDate,asc">End Date</option>
-                    <option value="status,asc">Status</option>
+                    <option value="createdAt,desc" th:selected="${sort == 'createdAt,desc'}">Newest</option>
+                    <option value="createdAt,asc" th:selected="${sort == 'createdAt,asc'}">Oldest</option>
+                    <option value="startDate,asc" th:selected="${sort == 'startDate,asc'}">Start Date Asc</option>
+                    <option value="startDate,desc" th:selected="${sort == 'startDate,desc'}">Start Date Desc</option>
+                    <option value="endDate,asc" th:selected="${sort == 'endDate,asc'}">End Date Asc</option>
+                    <option value="endDate,desc" th:selected="${sort == 'endDate,desc'}">End Date Desc</option>
+                    <option value="status,asc" th:selected="${sort == 'status,asc'}">Status Asc</option>
+                    <option value="status,desc" th:selected="${sort == 'status,desc'}">Status Desc</option>
                 </select>
             </div>
 
@@ -188,6 +191,9 @@
                         On
                         <span th:text="${request.decidedAt}">2026-05-15</span>
                     </div>
+                    <div th:if="${request.decidedByName != null}" class="small text-muted">
+                        By <span th:text="${request.decidedByName}">Manager</span>
+                    </div>
                 </div>
                 <div th:if="${request.decidedAt == null}" class="text-muted">
                     Not decided yet
@@ -236,7 +242,7 @@
         <ul class="pagination">
             <li class="page-item" th:classappend="${requests.first} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/leave/requests(page=${requests.number - 1}, size=${requests.size}, status=${status}, leaveType=${leaveType})}">
+                   th:href="@{/leave/requests(page=${requests.number - 1}, size=${requests.size}, status=${status}, leaveType=${leaveType}, sort=${sort})}">
                     Previous
                 </a>
             </li>
@@ -250,7 +256,7 @@
 
             <li class="page-item" th:classappend="${requests.last} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/leave/requests(page=${requests.number + 1}, size=${requests.size}, status=${status}, leaveType=${leaveType})}">
+                   th:href="@{/leave/requests(page=${requests.number + 1}, size=${requests.size}, status=${status}, leaveType=${leaveType}, sort=${sort})}">
                     Next
                 </a>
             </li>
