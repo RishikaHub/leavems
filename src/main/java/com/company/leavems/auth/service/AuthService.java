@@ -49,6 +49,7 @@ public class AuthService {
         if (userRepository.existsByEmailIgnoreCase(request.email())) {
             throw new BusinessException("Email already exists.");
         }
+      
 
         UserRole role = request.role() == null ? UserRole.EMPLOYEE : request.role();
 
